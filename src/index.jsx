@@ -48,7 +48,7 @@ const App = () => {
                 flyToPosition([-6.0, 3, 3.4], [-17, 0, -1]);
                 break;
             case 2:
-                flyToPosition([-4.2, 1, 3.25], [Math.PI * 1, 0, -12]);
+                flyToPosition([-4.4, 1, 3.6], [Math.PI * 1, 0, -12]);
                 break;
             case 3:
                 flyToPosition([-1.1, 3.5, 6.5], [4, -128, 9]);
