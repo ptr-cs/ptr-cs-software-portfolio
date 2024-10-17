@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactDOM from 'react-dom/client'
 import { Canvas } from '@react-three/fiber'
 import Experience from './Experience.jsx'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { FaGithub, FaLinkedin  } from 'react-icons/fa';
 import { Vector3 } from 'three';
@@ -15,7 +15,9 @@ const App = () => {
     const [isAnimating, setIsAnimating] = useState(false);  // Track whether camera is animating
     const [targetPosition, setTargetPosition] = useState(new Vector3(-16.25, 5, 10));  // Initial camera position
     const [targetRotation, setTargetRotation] = useState(new Vector3(Math.PI * 3, Math.PI / 2, Math.PI / -1.4));  // Initial camera position
-
+    const [expanded, setExpanded] = useState(false); // State to track if the dropdown is expanded
+    const navRef = useRef(null); // Reference to the navigation menu
+    
   // Function to handle camera movement
   const flyToPosition = (newPosition, newRotation) => {
     setIsAnimating(true);
@@ -23,21 +25,22 @@ const App = () => {
     setTargetRotation(new Vector3(...newRotation));  // Update target rotation
   };
 
-    // Event handler to update the camera position
-    const updateCameraPosition = (position, rotation) => {
-        // Set camera position and ensure the controls target is correct
-        if (cameraRef.current && controlsRef.current) {
-            setTimeout(() => { // timeout necessary to update the camera right after the model loads
-                // Position the camera
-                cameraRef.current.position.set(...position); // Set the camera position
-                cameraRef.current.updateProjectionMatrix(); // Ensure the camera updates its projection
+  // Function to close the dropdown when clicking outside of it
+  const handleClickOutside = (event) => {
+    if (navRef.current && !navRef.current.contains(event.target)) {
+      setExpanded(false); // Close the dropdown menu if clicked outside
+    }
+  };
 
-                // Set the target for OrbitControls
-                controlsRef.current.target.set(...rotation); // Make sure the camera looks at the origin
-                controlsRef.current.update(); // Update the controls
-            }, 0)
-        }
+  useEffect(() => {
+    // Add event listener when the component mounts
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    // Remove event listener when the component unmounts
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     };
+  }, []);
 
     return (
         <>
@@ -67,9 +70,9 @@ const App = () => {
             >
 
                 <div>
-                    <Navbar bg="light" expand="lg">
+                    <Navbar bg="light" expand="lg" ref={navRef} expanded={expanded}>
                         <Container className="justify-content-start w-100 m-0">
-                            <Navbar.Toggle aria-controls="basic-navbar-nav" className="me-2" /> {/* Hamburger icon */}
+                            <Navbar.Toggle aria-controls="basic-navbar-nav" className="me-2" onClick={() => setExpanded(!expanded)}/> {/* Hamburger icon */}
                             <Navbar.Brand href="#home" className='m-0'>Parker Rowland's Portfolio</Navbar.Brand>
                             <Navbar.Collapse id="basic-navbar-nav">
                                 <Nav className="ms-auto w-auto">
