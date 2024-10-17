@@ -91,18 +91,26 @@ const App = () => {
 
     // Function to close the dropdown when clicking outside of it
     const handleClickOutside = (event) => {
+        // cancel navigation transition if the user clicks somewhere
+        setIsAnimating(false);
         if (navRef.current && !navRef.current.contains(event.target)) {
             setExpanded(false); // Close the dropdown menu if clicked outside
         }
     };
+    
+    // cancel navigation transition if the user scrolls the mouse
+    const handleWheel = () => {
+        setIsAnimating(false);
+      };
 
     useEffect(() => {
         // Add event listener when the component mounts
         document.addEventListener('mousedown', handleClickOutside);
-
+        window.addEventListener('wheel', handleWheel);
         // Remove event listener when the component unmounts
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener('wheel', handleWheel);
         };
     }, []);
 
