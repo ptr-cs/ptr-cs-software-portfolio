@@ -169,13 +169,13 @@ const App = () => {
                                 Next <FaArrowRight className="me-2" />
                             </Button>
 
-                            <Button variant="outline-secondary" onClick={handleShow} className="d-flex align-items-center user-select-none">
+                            <Button variant="outline-secondary" onClick={() => {setIsAnimating(false); handleShow();}} className="d-flex align-items-center user-select-none">
                                 <FaQuestionCircle className="me-2" /> Help
                             </Button>
                         </Container>
                     </Navbar>
 
-                    <Modal show={show} onHide={handleClose} centered>
+                    <Modal show={show} onHide={() => {setIsAnimating(false); handleClose(); }} centered>
                         <Modal.Header closeButton>
                             <Modal.Title>3D Scene Controls Help</Modal.Title>
                         </Modal.Header>
