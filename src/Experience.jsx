@@ -34,14 +34,13 @@ export default function Experience({ cameraRef, controlsRef, targetPosition, tar
             
             // Stop animation if the camera is close to the target
             if (currentPosition.distanceTo(targetPosition) < 0.01) {
-                console.log("isAnimating set to false")
                 isAnimating = false;  // Stop animation
             }
         }
     });
 
     return <>
-        <OrbitControls makeDefault ref={controlsRef} />
+        <OrbitControls makeDefault ref={controlsRef} maxPolarAngle={Math.PI/2} />
         <directionalLight castShadow position={[1, 2, 3]} intensity={3.5} shadow-normalBias={0.04} shadow-mapSize={[4096, 4096]} />
         <ambientLight intensity={.5} />
         <ContactShadows />

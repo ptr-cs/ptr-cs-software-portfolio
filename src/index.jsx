@@ -4,11 +4,23 @@ import ReactDOM from 'react-dom/client'
 import { Canvas } from '@react-three/fiber'
 import Experience from './Experience.jsx'
 import { useRef, useState, useEffect } from 'react'
-import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
-import { FaGithub, FaLinkedin  } from 'react-icons/fa';
+import { Navbar, Nav, NavDropdown, Container, Button, Modal } from 'react-bootstrap';
+import { FaGithub, FaLinkedin, FaArrowLeft, FaArrowRight, FaQuestionCircle } from 'react-icons/fa';
 import { Vector3 } from 'three';
 
 const App = () => {
+
+    const navigationItems = [
+        'Welcome',
+        'Technologies',
+        'Education',
+        'Work History 1',
+        'Work History 2',
+        'Work History 3',
+        'Email',
+        'LinkedIn',
+        'GitHub',
+    ];
 
     const cameraRef = useRef();
     const controlsRef = useRef();
@@ -17,30 +29,82 @@ const App = () => {
     const [targetRotation, setTargetRotation] = useState(new Vector3(Math.PI * 3, Math.PI / 2, Math.PI / -1.4));  // Initial camera position
     const [expanded, setExpanded] = useState(false); // State to track if the dropdown is expanded
     const navRef = useRef(null); // Reference to the navigation menu
-    
-  // Function to handle camera movement
-  const flyToPosition = (newPosition, newRotation) => {
-    setIsAnimating(true);
-    setTargetPosition(new Vector3(...newPosition));  // Update target position
-    setTargetRotation(new Vector3(...newRotation));  // Update target rotation
-  };
+    const [show, setShow] = useState(false); // State to control the modal visibility
 
-  // Function to close the dropdown when clicking outside of it
-  const handleClickOutside = (event) => {
-    if (navRef.current && !navRef.current.contains(event.target)) {
-      setExpanded(false); // Close the dropdown menu if clicked outside
+    // Function to toggle the modal
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+    
+    // State to keep track of the current navigation index
+    const [currentIndex, setCurrentIndex] = useState(0);
+    
+    const navigate = (index) => {
+        setCurrentIndex(index)
+        switch (index) {
+            case 0:
+                flyToPosition([-16.25, 5, 10], [Math.PI * 3, Math.PI / 2, Math.PI / -1.4]);
+                break;
+            case 1:
+                flyToPosition([-6.0, 3, 3.4], [-17, 0, -1]);
+                break;
+            case 2:
+                flyToPosition([-4.2, 1, 3.25], [Math.PI * 1, 0, -12]);
+                break;
+            case 3:
+                flyToPosition([-1.1, 3.5, 6.5], [4, -128, 9]);
+                break;
+            case 4:
+                flyToPosition([4.5, 3.5, 4.5], [10.75, -128, -8]);
+                break;
+            case 5:
+                flyToPosition([6.75, 3.75, .0], [10.75, -128, -8]);
+                break;
+            case 6:
+                flyToPosition([-1.5, 1, 5.15], [Math.PI * 3, 0, -12]);
+                break;
+            case 7:
+                flyToPosition([3.2, 1, -2.5], [0, 0, 2]);
+                break;
+            case 8:
+                flyToPosition([-0.25, 1, -4.25], [-4, 0, 2]);
+                break;
+        }
     }
-  };
-
-  useEffect(() => {
-    // Add event listener when the component mounts
-    document.addEventListener('mousedown', handleClickOutside);
     
-    // Remove event listener when the component unmounts
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+    const handlePrevious = () => {
+        navigate(currentIndex === 0 ? navigationItems.length - 1 : currentIndex - 1
+        );
+      };
+    
+      // Function to go to the next item, wrapping around if at the end
+      const handleNext = () => {
+        navigate(currentIndex === navigationItems.length - 1 ? 0 : currentIndex + 1
+        );
+      };
+
+    // Function to handle camera movement
+    const flyToPosition = (newPosition, newRotation) => {
+        setIsAnimating(true);
+        setTargetPosition(new Vector3(...newPosition));  // Update target position
+        setTargetRotation(new Vector3(...newRotation));  // Update target rotation
     };
-  }, []);
+
+    // Function to close the dropdown when clicking outside of it
+    const handleClickOutside = (event) => {
+        if (navRef.current && !navRef.current.contains(event.target)) {
+            setExpanded(false); // Close the dropdown menu if clicked outside
+        }
+    };
+
+    useEffect(() => {
+        // Add event listener when the component mounts
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Remove event listener when the component unmounts
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <>
@@ -53,42 +117,30 @@ const App = () => {
                     position: [- 4, 3, 6]
                 }}
             >
-                <Experience cameraRef={cameraRef} controlsRef={controlsRef} targetPosition={targetPosition} targetRotation={targetRotation} isAnimating={isAnimating}/>
+                <Experience cameraRef={cameraRef} controlsRef={controlsRef} targetPosition={targetPosition} targetRotation={targetRotation} isAnimating={isAnimating} />
             </Canvas>
-            <div
-                style={{
-                    position: 'absolute',
-                    top: '0px',
-                    left: '0px',
-                    margin: '10px',
-                    width: 'calc(100% - 20px)',
-                    background: 'rgba(255, 255, 255, 0.5)',
-                    padding: '10px',
-                    borderRadius: '10px',
-                    zIndex: 10, // Ensure it stays on top of the 3D canvas
-                }}
-            >
+            <div className='nav-container'>
 
                 <div>
                     <Navbar bg="light" expand="lg" ref={navRef} expanded={expanded}>
                         <Container className="justify-content-start w-100 m-0">
-                            <Navbar.Toggle aria-controls="basic-navbar-nav" className="me-2" onClick={() => setExpanded(!expanded)}/> {/* Hamburger icon */}
-                            <Navbar.Brand href="#home" className='m-0'>Parker Rowland's Portfolio</Navbar.Brand>
+                            <Navbar.Toggle aria-controls="basic-navbar-nav" className="me-2 user-select-none" onClick={() => { setIsAnimating(false); setExpanded(!expanded) }} />
+                            <Navbar.Brand href="#home" className='m-0 nav-brand-text'>Parker Rowland's Portfolio</Navbar.Brand>
                             <Navbar.Collapse id="basic-navbar-nav">
                                 <Nav className="ms-auto w-auto">
-                                    <Nav.Link href="#home" onClick={() => flyToPosition([-16.25, 5, 10], [Math.PI * 3, Math.PI / 2, Math.PI / -1.4])}>Welcome</Nav.Link>
-                                    <Nav.Link href="#technologies" onClick={() => flyToPosition([-6.0, 3, 3.4], [-17, 0, -1])}>Technologies</Nav.Link>
-                                    <Nav.Link href="#education" onClick={() => flyToPosition([-5.5, 1, 3.5], [Math.PI * 3, 0, -12])}>Education</Nav.Link>
+                                    <Nav.Link href="#home" onClick={() => navigate(0)}>Welcome</Nav.Link>
+                                    <Nav.Link href="#technologies" onClick={() => navigate(1)}>Technologies</Nav.Link>
+                                    <Nav.Link href="#education" onClick={() => navigate(2)}>Education</Nav.Link>
                                     <NavDropdown title="Work History" id="nav-dropdown" className="w-auto">
-                                        <NavDropdown.Item href="#NSWC_Dahlgren" onClick={() => flyToPosition([-1.1,3.5,6.5], [4, -128, 9])}>NSWC Dahlgren</NavDropdown.Item>
-                                        <NavDropdown.Item href="#Intelichart" onClick={() => flyToPosition([4.5,3.5,4.5], [10.75, -128, -8])}>Intelichart</NavDropdown.Item>
-                                        <NavDropdown.Item href="#USGS" onClick={() => flyToPosition([6.75,3.75,.0],[10.75, -128, -8])}>USGS</NavDropdown.Item>
+                                        <NavDropdown.Item href="#NSWC_Dahlgren" onClick={() => navigate(3)}>NSWC Dahlgren</NavDropdown.Item>
+                                        <NavDropdown.Item href="#Intelichart" onClick={() => navigate(4)}>Intelichart</NavDropdown.Item>
+                                        <NavDropdown.Item href="#USGS" onClick={() => navigate(5)}>USGS</NavDropdown.Item>
                                     </NavDropdown>
                                     <NavDropdown title="Contact" id="nav-dropdown" className="w-auto">
-                                        <NavDropdown.Item href="#email" onClick={() => flyToPosition([-1.5, 1, 5.15 ], [Math.PI * 3, 0, -12])}>Email</NavDropdown.Item>
-                                        <NavDropdown.Item href="#LinkedIn" onClick={() => flyToPosition([3.2, 1, -2.5 ], [0, 0, 2])}>LinkedIn</NavDropdown.Item>
+                                        <NavDropdown.Item href="#email" onClick={() => navigate(6)}>Email</NavDropdown.Item>
+                                        <NavDropdown.Item href="#LinkedIn" onClick={() => navigate(7)}>LinkedIn</NavDropdown.Item>
+                                        <NavDropdown.Item href="#GitHub" onClick={() => navigate(8)}>GitHub</NavDropdown.Item>
                                     </NavDropdown>
-                                    <Nav.Link href="#GitHub" onClick={() => flyToPosition([-0.25, 1, -4.25], [-4, 0, 2])}>GitHub</Nav.Link>
                                     <div className='d-flex '>
                                         <Nav.Link href="https://github.com/ptr-cs" target="_blank" className="d-flex align-items-center me-2">
                                             <FaGithub size={30} style={{ color: 'black' }} />
@@ -101,6 +153,46 @@ const App = () => {
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>
+
+                    <Navbar
+                        bg="light"
+                        fixed="bottom" // Fix the footer to the bottom
+                        className="justify-content-between p-2 footer">
+                        <Container fluid className="d-flex justify-content-between align-items-center">
+                            {/* Left Arrow Button */}
+                            <Button onClick={handlePrevious} variant="outline-primary" className="d-flex align-items-center user-select-none">
+                                <FaArrowLeft className="me-2" /> Previous
+                            </Button>
+
+                            {/* Right Arrow Button */}
+                            <Button onClick={handleNext} variant="outline-primary" className="d-flex align-items-center user-select-none">
+                                Next <FaArrowRight className="me-2" />
+                            </Button>
+
+                            <Button variant="outline-secondary" onClick={handleShow} className="d-flex align-items-center user-select-none">
+                                <FaQuestionCircle className="me-2" /> Help
+                            </Button>
+                        </Container>
+                    </Navbar>
+
+                    <Modal show={show} onHide={handleClose} centered>
+                        <Modal.Header closeButton>
+                            <Modal.Title>3D Scene Controls Help</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>Here are the controls to interact with the 3D scene:</p>
+                            <ul>
+                                <li>Left-click and drag to rotate the scene.</li>
+                                <li>Scroll to zoom in and out.</li>
+                                <li>Right-click and drag to pan the scene.</li>
+                            </ul>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
             </div>
         </>
