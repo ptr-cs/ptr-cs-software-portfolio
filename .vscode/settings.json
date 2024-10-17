@@ -1,4 +1,4 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/990c9973-4d87-4a54-a641-748814fa25db/resourceGroups/ptr-cs-rg/providers/Microsoft.Web/sites/ptr-cs-blog",
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": "dist"
 }
