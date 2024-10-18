@@ -14,6 +14,7 @@ const App = () => {
         'Welcome',
         'Technologies',
         'Education',
+        'Experience',
         'Work History 1',
         'Work History 2',
         'Work History 3',
@@ -42,7 +43,7 @@ const App = () => {
         setCurrentIndex(index)
         switch (index) {
             case 0:
-                flyToPosition([-16.25, 5, 10], [Math.PI * 3, Math.PI / 2, Math.PI / -1.4]);
+                flyToPosition([-16, -2, 10.6], [0.5,Math.PI + 1.15,0]);
                 break;
             case 1:
                 flyToPosition([-6.0, 3, 3.4], [-17, 0, -1]);
@@ -51,21 +52,24 @@ const App = () => {
                 flyToPosition([-4.4, 1, 3.6], [Math.PI * 1, 0, -12]);
                 break;
             case 3:
-                flyToPosition([-1.1, 3.5, 6.5], [4, -128, 9]);
+                flyToPosition([0.35,0.6,-0.08], [2, .3, 1]);
                 break;
             case 4:
-                flyToPosition([4.5, 3.5, 4.5], [10.75, -128, -8]);
+                flyToPosition([-1.1, 3.5, 6.5], [4, -128, 9]);
                 break;
             case 5:
-                flyToPosition([6.75, 3.75, .0], [10.75, -128, -8]);
+                flyToPosition([4.5, 3.5, 4.5], [10.75, -128, -8]);
                 break;
             case 6:
-                flyToPosition([-1.5, 1, 5.15], [Math.PI * 3, 0, -12]);
+                flyToPosition([6.75, 3.75, .0], [10.75, -128, -8]);
                 break;
             case 7:
-                flyToPosition([3.2, 1, -2.5], [0, 0, 2]);
+                flyToPosition([-1.5, 1, 5.15], [Math.PI * 3, 0, -12]);
                 break;
             case 8:
+                flyToPosition([3.2, 1, -2.5], [0, 0, 2]);
+                break;
+            case 9:
                 flyToPosition([-0.25, 1, -4.25], [-4, 0, 2]);
                 break;
         }
@@ -101,16 +105,26 @@ const App = () => {
     // cancel navigation transition if the user scrolls the mouse
     const handleWheel = () => {
         setIsAnimating(false);
-      };
+    };
+    
+    const handleTouch = () => { 
+        setIsAnimating(false);
+    };
 
     useEffect(() => {
         // Add event listener when the component mounts
         document.addEventListener('mousedown', handleClickOutside);
         window.addEventListener('wheel', handleWheel);
+        window.addEventListener('ontouchstart', handleTouch);
+        window.addEventListener('ontouchmove', handleTouch);
+        window.addEventListener('ontouchend', handleTouch);
         // Remove event listener when the component unmounts
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
             window.removeEventListener('wheel', handleWheel);
+            window.removeEventListener('ontouchstart', handleTouch);
+            window.removeEventListener('ontouchmove', handleTouch);
+            window.removeEventListener('ontouchend', handleTouch);
         };
     }, []);
 
@@ -139,15 +153,16 @@ const App = () => {
                                     <Nav.Link href="#home" onClick={() => navigate(0)}>Welcome</Nav.Link>
                                     <Nav.Link href="#technologies" onClick={() => navigate(1)}>Technologies</Nav.Link>
                                     <Nav.Link href="#education" onClick={() => navigate(2)}>Education</Nav.Link>
+                                    <Nav.Link href="#experience" onClick={() => navigate(3)}>Experience</Nav.Link>
                                     <NavDropdown title="Work History" id="nav-dropdown" className="w-auto">
-                                        <NavDropdown.Item href="#NSWC_Dahlgren" onClick={() => navigate(3)}>NSWC Dahlgren</NavDropdown.Item>
-                                        <NavDropdown.Item href="#Intelichart" onClick={() => navigate(4)}>Intelichart</NavDropdown.Item>
-                                        <NavDropdown.Item href="#USGS" onClick={() => navigate(5)}>USGS</NavDropdown.Item>
+                                        <NavDropdown.Item href="#NSWC_Dahlgren" onClick={() => navigate(4)}>NSWC Dahlgren</NavDropdown.Item>
+                                        <NavDropdown.Item href="#Intelichart" onClick={() => navigate(5)}>Intelichart</NavDropdown.Item>
+                                        <NavDropdown.Item href="#USGS" onClick={() => navigate(6)}>USGS</NavDropdown.Item>
                                     </NavDropdown>
                                     <NavDropdown title="Contact" id="nav-dropdown" className="w-auto">
-                                        <NavDropdown.Item href="#email" onClick={() => navigate(6)}>Email</NavDropdown.Item>
-                                        <NavDropdown.Item href="#LinkedIn" onClick={() => navigate(7)}>LinkedIn</NavDropdown.Item>
-                                        <NavDropdown.Item href="#GitHub" onClick={() => navigate(8)}>GitHub</NavDropdown.Item>
+                                        <NavDropdown.Item href="#email" onClick={() => navigate(7)}>Email</NavDropdown.Item>
+                                        <NavDropdown.Item href="#LinkedIn" onClick={() => navigate(8)}>LinkedIn</NavDropdown.Item>
+                                        <NavDropdown.Item href="#GitHub" onClick={() => navigate(9)}>GitHub</NavDropdown.Item>
                                     </NavDropdown>
                                     <div className='d-flex '>
                                         <Nav.Link href="https://github.com/ptr-cs" target="_blank" className="d-flex align-items-center me-2">

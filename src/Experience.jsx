@@ -12,12 +12,12 @@ export default function Experience({ cameraRef, controlsRef, targetPosition, tar
         // Set camera position and ensure the controls target is correct
         if (cameraRef.current && controlsRef.current) {
             setTimeout(() => { // timeout necessary to update the camera right after the model loads
-                // Position the camera
-                cameraRef.current.position.set(-16.25, 5, 10); // Set the camera position
+                // Position the camera (default: -15.5, -1, 10.3)
+                cameraRef.current.position.set(-15.5, -1, 10.3); // Set the camera position
                 cameraRef.current.updateProjectionMatrix(); // Ensure the camera updates its projection
 
-                // Set the target for OrbitControls
-                controlsRef.current.target.set(Math.PI * 3, Math.PI / 2, Math.PI / -1.4); // Make sure the camera looks at the origin
+                // Set the target for OrbitControls (default: 0.5,Math.PI + 1.15,0)
+                controlsRef.current.target.set(0.5,Math.PI + 1.15,0); // Make sure the camera looks at the origin
                 controlsRef.current.update(); // Update the controls
             }, 0)
         }
@@ -52,7 +52,7 @@ export default function Experience({ cameraRef, controlsRef, targetPosition, tar
             position={[4, 2, -2]}
             fov={75}
         />
-        <Suspense fallback={<Text color={"#000000"} scale={1.25} position={[5,0,0]} rotation={[0, -1.4, 0]}>Loading...</Text>}>
+        <Suspense fallback={<Text color={"#000000"} scale={1.25} position={[0,0,0]} rotation={[0, Math.PI*1.75, 0]}>Loading...</Text>}>
             <Model receiveShadow castShadow />
         </Suspense>
     </>
