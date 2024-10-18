@@ -47,7 +47,6 @@ export default function Model()
         
         <Text position={[-9.5,2,2]} scale={0.15} rotation={[0,1.11,(-Math.PI / 2) + 1.56]} lineHeight={1} font={'./fonts/Orbitron-VariableFont_wght.ttf'} color={'#000000'}textAlign='left'>TECHNOLOGIES I ♡:&#10;&#10;JavaScript, TypeScript, Python,&#10;C#, CSS, Sass, Angular, React,&#10;Vue, ASP.NET, Postgresql,&#10; MongoDB and WPF</Text>
         <Plane args={[.335, .213]} rotation={[0.25,4.237,0.225]} position={[.797,0.545,0.225]}>
-          {/* args = [width, height] */}
           <meshStandardMaterial color="black" />
         </Plane>
         <Text position={[.793,0.545,0.225]}  scale={0.013} rotation={[0.25,4.25,0.22]} lineHeight={1.1} font={'./fonts/RobotoMono-VariableFont_wght.ttf'}  maxWidth={25} color={'#00ff00'} textAlign='left'>Software Developer with 7 years of experience in both public and private sectors. Agile/Scrum experienced. Specializing in UI/UX and full-stack development using a variety of technologies including Python, JavaScript, TypeScript, CSS, Sass, Angular, React, Vue, ASP.NET, Postgresql, MongoDB and WPF. Python scripting and responsive web design experience. Version control experience with Git, GitLab, Team Foundation Server, and JIRA. Proficient with Figma, Visual Studio Code, Visual Studio, and GitLab.</Text>
